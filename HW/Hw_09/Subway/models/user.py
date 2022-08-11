@@ -1,6 +1,8 @@
 import uuid
 from Subway.models.card import *
 from Subway.models.bank import BankAccount
+from Subway.models.logger import *
+from Subway.exceptions import UsernameWrongError, PasswordWrongError, IdNotFoundError
 
 
 class User:
@@ -13,6 +15,7 @@ class User:
         self.wallet = {}
         self.__id_number = str(uuid.uuid4().node)
         self.__class__.users_dict[self.__id_number] = self
+        logger.info(f"{self.username} with in balance {self.bank_account}!!")
         with open("user.pickle", "ab") as file:
             pickle.dump(self, file)
             file.write(b"\n")
@@ -26,7 +29,8 @@ class User:
         if len(value) > 5:
             self._username = value
         else:
-            raise ValueError("username is not more than 5 character")
+            logger.error("UsernameWrongError username is not more than 5 character")
+            raise UsernameWrongError("username is not more than 5 character")
 
     @property
     def password(self):
@@ -38,9 +42,11 @@ class User:
             if value.isalnum():
                 self._password = value
             else:
-                raise ValueError("password is not alphanumeric")
+                logger.error("PasswordWrongError password is not alphanumeric")
+                raise PasswordWrongError("password is not alphanumeric")
         else:
-            raise ValueError("password must be more than 4 character")
+            logger.error("PasswordWrongError password must be more than 4 character")
+            raise PasswordWrongError("password must be more than 4 character")
 
     def __repr__(self):
         return f"my username is:{self.username}"
@@ -68,18 +74,19 @@ class User:
             if password == cls.users_dict[id_code].password:
                 return cls.users_dict[id_code]
             else:
-                raise ValueError("password doesnt match!!")
+                logger.error("PasswordWrongError password doesnt match!!")
+                raise PasswordWrongError("password doesnt match!!")
         else:
-            raise ValueError("id_code not found")
+            logger.error("IdNotFoundError id_code not found")
+            raise IdNotFoundError("id_code not found")
 
-
-obj1 = BankAccount("Blue Bank", 10000, 200)
-obj2 = User("khodetitus", "masoud12345", obj1)
-obj2.add_card("Single Card", 10)
-obj2.add_card("Credit Card", 60)
-obj2.add_card("Term Card", 80)
-print(obj2.wallet)
-obj2.wallet["Single Card"].payment(2)
-obj2.wallet["Credit Card"].payment(2)
-obj2.wallet["Term Card"].payment(2)
-print(obj2.wallet)
+# obj1 = BankAccount("Blue Bank", 10000, 200)
+# obj2 = User("khodetitus", "masoud12345", obj1)
+# obj2.add_card("Single Card", 10)
+# obj2.add_card("Credit Card", 60)
+# obj2.add_card("Term Card", 80)
+# print(obj2.wallet)
+# obj2.wallet["Single Card"].payment(2)
+# obj2.wallet["Credit Card"].payment(2)
+# obj2.wallet["Term Card"].payment(2)
+# print(obj2.wallet)

@@ -17,7 +17,7 @@ class Admin(User):
         if (username, password) in cls.admins_dict:
             return cls.admins_dict[username, password]
         else:
-            logger.info("AccessDeniedError admin access denied")
+            logger.error("AccessDeniedError admin access denied")
             raise AccessDeniedError("admin access denied")
 
 # bank2 = BankAccount("blue", 12123, 100)
