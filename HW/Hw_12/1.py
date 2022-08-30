@@ -34,5 +34,4 @@ class User:
         for  i in result:
             print(i.group())
             self._email = (i.group())
-z=User("amirhosseinhassani" , '09109911502', "amir0978@mail.com")
-print(len('amirhosseinhassani'))
+z=User("masoudzandi" , '09120572655', "masoudpro2@mail.com")
