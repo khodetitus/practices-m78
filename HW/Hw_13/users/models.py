@@ -118,7 +118,7 @@ class User(DBModel):  # User model
             RETURNING user_id
             """
             cur.execute(command, (
-            self.full_name, self.last_name, self.phone, self.email, self.national_id, self.age, self.password))
+                self.full_name, self.last_name, self.phone, self.email, self.national_id, self.age, self.password))
             row = cur.fetchone()
             self.id = row[0]
             cur.close()

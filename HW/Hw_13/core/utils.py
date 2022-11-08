@@ -1,14 +1,17 @@
 from os import name as os_name, system as terminal
 from configs import DB_CONNECTION
 import psycopg2
+
 HOST = DB_CONNECTION["DBNAME"]
 USER = DB_CONNECTION["USER"]
 PORT = DB_CONNECTION["PORT"]
 PASSWORD = DB_CONNECTION["PASSWORD"]
+
+
 def create_tables():
     """ create tables in the PostgreSQL database"""
     commands = (
-            
+
         """CREATE TABLE IF NOT EXISTS users(
             user_id SERIAL PRIMARY KEY,
             first_name VARCHAR(255) NOT NULL,
@@ -63,7 +66,7 @@ def create_tables():
                 ON UPDATE CASCADE ON DELETE CASCADE
         )
         """
-        )
+    )
 
     try:
         conn = psycopg2.connect(f"dbname={HOST} user={USER} password={PASSWORD}")
@@ -80,5 +83,7 @@ def create_tables():
     finally:
         if conn is not None:
             conn.close()
+
+
 def clear():
     terminal('cls' if os_name.lower() == 'nt' else 'clear')
